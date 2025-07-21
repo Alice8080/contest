@@ -25,7 +25,7 @@ services:
     container_name: core
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./core:/code
+      - ./core:/app
     ports:
       - '8000:8000' # только core доступен снаружи
     depends_on:
@@ -41,7 +41,7 @@ services:
     container_name: analytics
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./analytics:/code
+      - ./analytics:/app
     depends_on:
       - postgres
       - nginx

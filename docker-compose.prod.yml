@@ -23,7 +23,9 @@ services:
     env_file:
       - .env.prod
     container_name: core
-    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+              gunicorn core.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - '8000:8000' 
     depends_on:
@@ -31,6 +33,8 @@ services:
       - nginx
     networks:
       - backend
+    volumes:
+      - static_volume:/app/staticfiles
 
   analytics:
     build: ./analytics
@@ -50,3 +54,4 @@ networks:
 
 volumes:
   pgdata:
+  static_volume:
