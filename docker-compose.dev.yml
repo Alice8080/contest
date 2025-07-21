@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   postgres:
@@ -7,6 +5,10 @@ services:
     env_file:
       - .env.dev
     restart: unless-stopped
+    networks:
+      - backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   nginx:
     image: nginx:latest
@@ -23,7 +25,7 @@ services:
     container_name: core
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/core
+      - ./core:/code
     ports:
       - '8000:8000' # только core доступен снаружи
     depends_on:
@@ -39,7 +41,7 @@ services:
     container_name: analytics
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/analytics
+      - ./analytics:/code
     depends_on:
       - postgres
       - nginx
@@ -49,3 +51,6 @@ services:
 networks:
   backend:
     driver: bridge
+
+volumes:
+  pgdata:
