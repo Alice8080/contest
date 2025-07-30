@@ -15,8 +15,41 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from viewflow.contrib.admin import Admin
+from viewflow.contrib.auth import AuthViewset
+from viewflow.urls import Site, Application
+
+from data.views import CustomUserViewset
+
+site = Site(
+    title="Приложение",
+    primary_color="#3949ab",
+    secondary_color="#5c6bc0",
+    viewsets=[
+        # AtlasApp(),
+        # StaffApp(),
+        Application(
+            app_name="users",
+            title="Пользователи",
+            icon="user",
+            viewsets=[
+                CustomUserViewset()
+                # CategoryViewset(),
+                # SubCategoryViewset(),
+                # ProjectViewset(),
+                # TaskViewset(),
+            ],
+        ),
+        # SalesApp(),
+        # Admin(),
+    ],
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('theme_soft_design.urls')),
+    path("", site.urls),
+    path("accounts/", AuthViewset().urls),
 ]

@@ -1,4 +1,22 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class Organisation(models.Model):
+    name = models.CharField(verbose_name='Наименование')
+
+    class Meta:
+        verbose_name = 'Организация'
+        verbose_name_plural = 'Организации'
+
+
+class CustomUser(AbstractUser):
+    father_name = models.CharField(verbose_name='Отчество')
+    organisation = models.ForeignKey(Organisation, verbose_name='Организация', on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
 
 class Author(models.Model):
     id = models.UUIDField(verbose_name='ID', primary_key=True)

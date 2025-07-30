@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +45,9 @@ INSTALLED_APPS = [
     'django_docker_helper',
     'rest_framework',
     'drf_generators',
-    'data'
+    'data',
+    'viewflow',
+    'theme_soft_design'
 ]
 
 REST_FRAMEWORK = {
@@ -140,3 +143,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'data.CustomUser'
+
+LOGIN_REDIRECT_URL = '/'

@@ -10,41 +10,31 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  nginx:
-    image: nginx:latest
-    ports:
-      - '80:80'
-    restart: unless-stopped
-    networks:
-      - backend
-
   core:
     build: ./core
     env_file:
       - .env.dev
     container_name: core
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py collectstatic --noinput && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./core:/app
     ports:
       - '8000:8000' # только core доступен снаружи
     depends_on:
       - postgres
-      - nginx
     networks:
       - backend
 
-  analytics: # доступен изнутри контейнера по http://analytics:8000
+  analytics: # доступен изнутри контейнера по http://analytics:8001
     build: ./analytics
     env_file:
       - .env.dev
     container_name: analytics
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8001
     volumes:
       - ./analytics:/app
     depends_on:
       - postgres
-      - nginx
     networks:
       - backend
 
